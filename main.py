@@ -108,7 +108,7 @@ def compute_precision(results, qrels, k=10):
     return np.mean(precision_scores)
 
 
-def run_search(k, b, metric_type, save_results=False, debug=False, model="bm25", dataset="apnews"):
+def run_search(k, b, metric_type, save_results=False, debug=False, model="bm25", dataset="inaugural_speeches"):
     """main function for searching and evaluating using nDCG@10 or precision@10 
     metric_type and using the BM25, RM3 Pseudo-Relevance, or Query Likelihood with Dirichelet Smoothing models"""
 
@@ -184,3 +184,19 @@ def run_search(k, b, metric_type, save_results=False, debug=False, model="bm25",
             json.dump({"results": results, metric_type: metric}, f, indent=2)
 
     return metric
+
+if __name__ == "__main__":
+    # Run search for inaugural speeches dataset
+    k = 1.2  # Default k1 value for BM25
+    b = 0.75  # Default b value for BM25
+    
+    # Run search with BM25 model and compute NDCG@10
+    ndcg_score = run_search(
+        k=k,
+        b=b,
+        metric_type="ndcg",
+        save_results=True,
+        debug=True,
+        model="bm25",
+        dataset="inaugural_speeches"
+    ) 
