@@ -1,3 +1,4 @@
+
 import os
 import json
 from tqdm import tqdm
@@ -7,6 +8,12 @@ import numpy as np
 import subprocess
 import matplotlib.pyplot as plt
 
+#helper functions - sustainability metrics
+from sustainability import calculateJobSustainabilityCost
+from sustainability import amortizedSustainabilityCost
+from sustainability import sustainability_cost_rate_per_second
+
+from mp1 import *
 
 def preprocess_corpus(input_file, output_dir):
     """preprocess corpus into jsonl format"""
@@ -117,6 +124,7 @@ def run_search(k, b, metric_type, save_results=False, debug=False, model="bm25",
         "apnews": 0,
         "cranfield": 1,
         "new_faculty": 1,
+        "inaugural_speeches" : 0
     }[dataset]
 
     # Paths to the raw corpus, queries, and relevance label files
@@ -130,11 +138,11 @@ def run_search(k, b, metric_type, save_results=False, debug=False, model="bm25",
     os.makedirs(processed_corpus_dir, exist_ok=True)
     index_dir = f"indexes/{dataset}"
 
-    # Preprocess corpus
-    if not os.path.exists(processed_corpus_dir) or not os.listdir(processed_corpus_dir):
-        preprocess_corpus(corpus_file, processed_corpus_dir)
-    else:
-        print(f"Preprocessed corpus already exists at {processed_corpus_dir}. Skipping preprocessing.")
+    # # Preprocess corpus
+    # if not os.path.exists(processed_corpus_dir) or not os.listdir(processed_corpus_dir):
+    #     preprocess_corpus(corpus_file, processed_corpus_dir)
+    # else:
+    #     print(f"Preprocessed corpus already exists at {processed_corpus_dir}. Skipping preprocessing.")
 
     # Build index
     build_index(processed_corpus_dir, index_dir)
@@ -200,3 +208,27 @@ if __name__ == "__main__":
         model="bm25",
         dataset="inaugural_speeches"
     ) 
+
+    #HOTCARBON ENERGY FORMULAS
+    kilojoules_used = 20
+
+    jsc_value_min,jsc_value_max = calculateJobSustainabilityCost(carbon_mix,kilojoules_used)
+    print(f"JSC Values")
+    print(f"Min: {jsc_value_min:.2f} gCO2e")
+    print(f"Max: {jsc_value_max:.2f} gCO2e")
+
+    asc_value_min = amortizedSustainabilityCost(jsc_value_min, 5, 3, 10000)
+    asc_value_max = amortizedSustainabilityCost(jsc_value_max, 5, 3, 10000)
+    print(f"\nASC Values")
+    print(f"Section 2.5 example calculation (expected result ~= 41.9): {amortizedSustainabilityCost(40, 5, 3, 10000):.1f}")
+    print(f"Min: {asc_value_min:.2f} gCO2e")
+    print(f"Max: {asc_value_max:.2f} gCO2e")
+
+    job_time_in_seconds = 5 #same data, but I've changed the time from 5 hours to 5 seconds for bigger numbers
+    scr_value_min = sustainability_cost_rate_per_second(jsc_value_min, job_time_in_seconds)
+    scr_value_max = sustainability_cost_rate_per_second(jsc_value_max, job_time_in_seconds)
+
+    print(f"\nSCR Values")
+    print(f"Min: {scr_value_min:.2f} gCO2e/s")
+    print(f"Max: {scr_value_max:.2f} gCO2e/s")
+
