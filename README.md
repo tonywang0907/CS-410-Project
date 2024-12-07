@@ -12,3 +12,9 @@ This produces an index for main.py to use.
 To generate the queries, you can use the generate_queries.py file. NOTE THAT THIS TAKES A LONG TIME. 
    -> There is a sample file already generated (data/inaugaral_speeches/inaugaral_speeches-queries.txt)
 	python3 generateQueries.py
+
+# First, build the index as mentioned in README
+python -m pyserini.index.lucene -collection JsonCollection -input ./data/inaugural_speeches/converted/ -index ./indexes/inaugural_speeches/ -generator DefaultLuceneDocumentGenerator
+
+# Second, run main.py to evaluate the search
+python main.py
