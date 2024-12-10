@@ -104,5 +104,6 @@ carbon_mix = {
 }
 
 
-if(__name__ == "_main__"):
+if __name__ == "__main__":
    main()
+   
