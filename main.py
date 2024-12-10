@@ -1,4 +1,3 @@
-
 import os
 import json
 from tqdm import tqdm
@@ -9,11 +8,12 @@ import subprocess
 import matplotlib.pyplot as plt
 
 #helper functions - sustainability metrics
-from sustainability import calculateJobSustainabilityCost
-from sustainability import amortizedSustainabilityCost
-from sustainability import sustainability_cost_rate_per_second
-
-from mp1 import *
+from sustainability import (
+    calculateJobSustainabilityCost,
+    amortizedSustainabilityCost, 
+    sustainability_cost_rate_per_second,
+    carbon_mix
+)
 
 def preprocess_corpus(input_file, output_dir):
     """preprocess corpus into jsonl format"""
@@ -193,6 +193,27 @@ def run_search(k, b, metric_type, save_results=False, debug=False, model="bm25",
 
     return metric
 
+def calculate_sustainability_metrics(kilojoules_used=20, job_time_in_seconds=5):
+    """Calculate and print various sustainability metrics."""
+    jsc_value_min, jsc_value_max = calculateJobSustainabilityCost(carbon_mix, kilojoules_used)
+    print(f"JSC Values")
+    print(f"Min: {jsc_value_min:.2f} gCO2e")
+    print(f"Max: {jsc_value_max:.2f} gCO2e")
+
+    asc_value_min = amortizedSustainabilityCost(jsc_value_min, 5, 3, 10000)
+    asc_value_max = amortizedSustainabilityCost(jsc_value_max, 5, 3, 10000)
+    print(f"\nASC Values")
+    print(f"Section 2.5 example calculation (expected result ~= 41.9): {amortizedSustainabilityCost(40, 5, 3, 10000):.1f}")
+    print(f"Min: {asc_value_min:.2f} gCO2e")
+    print(f"Max: {asc_value_max:.2f} gCO2e")
+
+    scr_value_min = sustainability_cost_rate_per_second(jsc_value_min, job_time_in_seconds)
+    scr_value_max = sustainability_cost_rate_per_second(jsc_value_max, job_time_in_seconds)
+
+    print(f"\nSCR Values")
+    print(f"Min: {scr_value_min:.2f} gCO2e/s")
+    print(f"Max: {scr_value_max:.2f} gCO2e/s")
+
 if __name__ == "__main__":
     # Run search for inaugural speeches dataset
     k = 1.2  # Default k1 value for BM25
@@ -209,26 +230,6 @@ if __name__ == "__main__":
         dataset="inaugural_speeches"
     ) 
 
-    #HOTCARBON ENERGY FORMULAS
-    kilojoules_used = 20
-
-    jsc_value_min,jsc_value_max = calculateJobSustainabilityCost(carbon_mix,kilojoules_used)
-    print(f"JSC Values")
-    print(f"Min: {jsc_value_min:.2f} gCO2e")
-    print(f"Max: {jsc_value_max:.2f} gCO2e")
-
-    asc_value_min = amortizedSustainabilityCost(jsc_value_min, 5, 3, 10000)
-    asc_value_max = amortizedSustainabilityCost(jsc_value_max, 5, 3, 10000)
-    print(f"\nASC Values")
-    print(f"Section 2.5 example calculation (expected result ~= 41.9): {amortizedSustainabilityCost(40, 5, 3, 10000):.1f}")
-    print(f"Min: {asc_value_min:.2f} gCO2e")
-    print(f"Max: {asc_value_max:.2f} gCO2e")
-
-    job_time_in_seconds = 5 #same data, but I've changed the time from 5 hours to 5 seconds for bigger numbers
-    scr_value_min = sustainability_cost_rate_per_second(jsc_value_min, job_time_in_seconds)
-    scr_value_max = sustainability_cost_rate_per_second(jsc_value_max, job_time_in_seconds)
-
-    print(f"\nSCR Values")
-    print(f"Min: {scr_value_min:.2f} gCO2e/s")
-    print(f"Max: {scr_value_max:.2f} gCO2e/s")
+    # Calculate sustainability metrics
+    calculate_sustainability_metrics()
 

@@ -17,6 +17,13 @@ carbon_intensity_values = {
    "fossils_max"  :  3789
 }
 
+# Move carbon_mix to top of file with other constants
+carbon_mix = {
+   "coal": 0.7,
+   "wind": 0.1,
+   "solar": 0.2              
+}
+
 def main():
    #example data (uncomment to run the test data)
    kilojoules_used = 20
@@ -75,16 +82,16 @@ def calculateJobSustainabilityCost(percent_carbon_mix, kiloJoulesUsed, estimated
    return (jsc_value_min, jsc_value_max)
 
 def amortizedSustainabilityCost(jsc_value, job_time_hours, estimated_hardware_lifetime_years, lifetime_hardware_embodied_costs):
-   #amortizedSustainabilityCost
-   #Input: 
+   # amortizedSustainabilityCost
+   # Input: 
    #  jsc_value: float value representing the gCO2e used to run a job
    #  job_time_hours: float value of the time in hours for the job to complete
    #  estimated_hardware_lifetime_years: float value of the estimated/avg life expected for the hardware running the job
    #  lifetime_hardware_embodied_costs: integer value calculating the gCO2e costs for the system
-   #Output:
+   # Output:
    #  asc_value: float value representing the ASC costs in gCO2e. This is the sum of the jsc_value and the ASC  
    # 
-   hardware_hours_available = estimated_hardware_lifetime_years * 365 * 24 #for simplicity, leap years are omitted
+   hardware_hours_available = estimated_hardware_lifetime_years * 365 * 24 # for simplicity, leap years are omitted
    percent_hours_used = job_time_hours/hardware_hours_available
 
    #amount used for job plus fraction of total hardware gCO2e costs
@@ -95,15 +102,5 @@ def sustainability_cost_rate_per_second(jsc_value, time_delta_seconds):
    #converts the jsc value to a seconds-proortional value (ie. gCO2e/s)
    return jsc_value/time_delta_seconds
 
-#TEST DATA BELOW#
-#example carbon mix
-carbon_mix = {
-   "coal": 0.7,
-   "wind": 0.1,
-   "solar": 0.2              
-}
-
-
 if __name__ == "__main__":
    main()
-   
