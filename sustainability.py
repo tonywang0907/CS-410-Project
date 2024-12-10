@@ -94,12 +94,12 @@ def amortizedSustainabilityCost(jsc_value, job_time_hours, estimated_hardware_li
    hardware_hours_available = estimated_hardware_lifetime_years * 365 * 24 # for simplicity, leap years are omitted
    percent_hours_used = job_time_hours/hardware_hours_available
 
-   #amount used for job plus fraction of total hardware gCO2e costs
+   # amount used for job plus fraction of total hardware gCO2e costs
    asc_value = jsc_value + float(lifetime_hardware_embodied_costs*percent_hours_used) 
    return asc_value  
 
 def sustainability_cost_rate_per_second(jsc_value, time_delta_seconds):
-   #converts the jsc value to a seconds-proortional value (ie. gCO2e/s)
+   # converts the jsc value to a seconds-proortional value (ie. gCO2e/s)
    return jsc_value/time_delta_seconds
 
 if __name__ == "__main__":
