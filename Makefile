@@ -1,8 +1,8 @@
 .PHONY: all run generateIndexInput generateQueries clean
 
-all: generateIndexInput generateQueries run
+all: generateIndexInput generateQueries generate_qrels run
 
-run:
+run: generateIndexInput generate_qrels
 	python3 main.py
 
 generateIndexInput:
@@ -17,6 +17,9 @@ generateIndexInput:
 
 generateQueries:
 	python3 generate_queries.py
+
+generate_qrels:
+	python3 generate_qrels.py
 
 clean:
 	rm -f ./data/inaugural_speeches/converted/*.json || true
