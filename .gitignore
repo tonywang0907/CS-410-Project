@@ -1,3 +1,5 @@
 mp1.py
 __pycache__
 indexes
+converted/*.json
+data/inaugural_speeches/inaugural_speeches-queries.txt

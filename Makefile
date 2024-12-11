@@ -20,5 +20,6 @@ generateQueries:
 
 clean:
 	rm -f ./data/inaugural_speeches/converted/*.json || true
-	rm -f ./indexes/inaugural_speeches/* || true
+	rm -f -rf ./indexes/* || true
+	rm ./data/indexes/inaugural_speeches/segments* || true
 	rm -f ./data/inaugural_speeches/inaugural_speeches-queries.txt || true

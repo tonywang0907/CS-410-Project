@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Ensure the 'converted' directory exists
-mkdir -p ./converted
+mkdir -p ./data/inaugural_speeches/converted
 
 # Loop through all the text files in the current directory
-for file in original/*.txt; do
+for file in ./data/inaugural_speeches/original/*.txt; do
   # Extract the filename without the extension
   filename=$(basename "$file" .txt)
 
@@ -18,7 +18,7 @@ for file in original/*.txt; do
   json="{\"id\": \"$filename\", \"contents\": \"$stripped_contents\"}"
 
   # Write the JSON to a new file in the 'converted' directory
-  echo "$json" > "./converted/$filename.json"
+  echo "$json" > "./data/inaugural_speeches/converted/$filename.json"
 done
 
 echo "Conversion complete. JSON files are in the 'converted' folder."
