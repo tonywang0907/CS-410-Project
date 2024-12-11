@@ -7,7 +7,7 @@ run:
 	python3 main.py
 
 generateIndexInput:
-	./data/inaugural_speeches/convert.bash
+	./data/convert.bash
 	python3 -m pyserini.index.lucene \
   --input ./data/inaugural_speeches/converted/ \
   --index indexes/inaugural_speeches \
