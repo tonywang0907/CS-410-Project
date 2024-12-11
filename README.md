@@ -1,5 +1,6 @@
 # CS-410-Project
 
+We can run ```make all``` to generate the queries and indexInput followed by the main script. Subsequent runs when the queries are generated can be done through ```make run```. We have also provided a ```make clean``` to clean those files. 
 
 The original datasets were not in a JSON format, so a small bash script was used to convert these documents to JSON for ingestion into the pyserini indexer
    -> data/inaugural_speeches/convert.bash : extracts the contents of the files from the data/original folder, converts them to JSON, and outputs that to file in data/inaugural_speeches/converted
