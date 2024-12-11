@@ -5,6 +5,7 @@ from pyserini.search.lucene import LuceneSearcher
 from pyserini.index.lucene import IndexReader
 import numpy as np
 import subprocess
+import time
 import matplotlib.pyplot as plt
 
 #helper functions - sustainability metrics
@@ -203,7 +204,6 @@ def calculate_sustainability_metrics(kilojoules_used=20, job_time_in_seconds=5):
     asc_value_min = amortizedSustainabilityCost(jsc_value_min, 5, 3, 10000)
     asc_value_max = amortizedSustainabilityCost(jsc_value_max, 5, 3, 10000)
     print(f"\nASC Values")
-    print(f"Section 2.5 example calculation (expected result ~= 41.9): {amortizedSustainabilityCost(40, 5, 3, 10000):.1f}")
     print(f"Min: {asc_value_min:.2f} gCO2e")
     print(f"Max: {asc_value_max:.2f} gCO2e")
 
@@ -226,10 +226,28 @@ if __name__ == "__main__":
         metric_type="ndcg",
         save_results=True,
         debug=True,
-        model="bm25",
+        model="tf-idf",
         dataset="inaugural_speeches"
     ) 
+    start_time = time.time()
+    
+    # Run search with BM25 model and compute NDCG@10
+    ndcg_score = run_search(
+        k=k,
+        b=b,
+        metric_type="ndcg",
+        save_results=True,
+        debug=True,
+        model="tf-idf",
+        dataset="inaugural_speeches"
+    )
+    
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"Total time taken: {total_time:.2f} seconds")
 
+    machineWatage = 800 #watts
+    joulesUsed = int(total_time * machineWatage) #force to integer
     # Calculate sustainability metrics
-    calculate_sustainability_metrics()
+    calculate_sustainability_metrics(kilojoules_used=joulesUsed, job_time_in_seconds=total_time)
 

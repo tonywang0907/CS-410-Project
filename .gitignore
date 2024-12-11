@@ -3,3 +3,4 @@ __pycache__
 indexes
 converted/*.json
 data/inaugural_speeches/inaugural_speeches-queries.txt
+results_inaugural_speeches.json
