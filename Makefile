@@ -1,23 +1,24 @@
+.PHONY: all run generateIndexInput generateQueries clean
 
-all:
-	generateIndexInput
-	generateQueries
-	run
+all: generateIndexInput generateQueries run
+
 run:
 	python3 main.py
 
 generateIndexInput:
-	./data/convert.bash
+	bash "./data/convert.bash"
 	python3 -m pyserini.index.lucene \
-  --input ./data/inaugural_speeches/converted/ \
-  --index indexes/inaugural_speeches \
-  --generator DefaultLuceneDocumentGenerator \
-  --threads 1
+		--collection JsonCollection \
+		--input "./data/inaugural_speeches/converted/" \
+		--index "indexes/inaugural_speeches" \
+		--generator DefaultLuceneDocumentGenerator \
+		--threads 1 \
+		--storePositions --storeDocvectors --storeRaw
 
 generateQueries:
-	python3 generateQueries.py
+	python3 generate_queries.py
 
 clean:
-	rm ./data/inaugural_speeches/converted/*.json
-	rm ./indexes/inaugural_speeches/_*
-	rm ./data/inaugural_speeches/inaugural_speeches-queries.txt
+	rm -f ./data/inaugural_speeches/converted/*.json || true
+	rm -f ./indexes/inaugural_speeches/* || true
+	rm -f ./data/inaugural_speeches/inaugural_speeches-queries.txt || true

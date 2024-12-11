@@ -60,7 +60,7 @@ with open(output_file, 'w') as query_file:
                     #for end of file chunks that are too small to summarize with min_length and max_length, 
                     #generate proportional values for the summary's min and max size
                     summary = summarizer(chunk, max_length=int(len(chunk)/2), min_length=int(len(chunk)/4), do_sample=False)
-                summaries.append(str(summary[0]['summary_text']).reaplce(".","").strip())
+                summaries.append(str(summary[0]['summary_text']).replace(".","").strip())
                 i+=1
             # Combine all chunk summaries into a single query (can also be improved with more complex logic)
             combined_query = " ".join(summaries)
