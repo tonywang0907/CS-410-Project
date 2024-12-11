@@ -1,0 +1,19 @@
+Index already exists at indexes/inaugural_speeches. Skipping index building.
+Number of queries: 57
+Number of qrels: 57
+Sample qrel: ('0', {'13_van_buren_1837': 1})
+Number of results: 57
+Sample result: ('0', [('13_van_buren_1837', 264.760009765625), ('14_harrison_1841', 126.01139831542969), ('15_polk_1845', 108.14330291748047), ('17_pierce_1853', 103.59420013427734), ('31_taft_1909', 93.98149871826172), ('10_adams_john_quincy_1825', 92.05239868164062), ('9_monroe_1821', 89.77519989013672), ('28_mckinley_1897', 89.17890167236328), ('27_cleveland_1893', 88.4259033203125), ('8_monroe_1817', 88.17610168457031)])
+NDCG@10: 0.9994
+JSC Values
+Min: 3.16 gCO2e
+Max: 7.15 gCO2e
+
+ASC Values
+Section 2.5 example calculation (expected result ~= 41.9): 41.9
+Min: 5.07 gCO2e
+Max: 9.05 gCO2e
+
+SCR Values
+Min: 0.63 gCO2e/s
+Max: 1.43 gCO2e/s
