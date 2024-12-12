@@ -218,8 +218,10 @@ if __name__ == "__main__":
     # Run search for inaugural speeches dataset
     k = 1.2  # Default k1 value for BM25
     b = 0.75  # Default b value for BM25
+    machineWatage = 800 #watts
     
     # Run search with BM25 model and compute NDCG@10
+    start_time = time.time()
     ndcg_score = run_search(
         k=k,
         b=b,
@@ -229,6 +231,14 @@ if __name__ == "__main__":
         model="tf-idf",
         dataset="inaugural_speeches"
     ) 
+
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"TF-IDF total time taken: {total_time:.2f} seconds")
+    joulesUsed = int(total_time * machineWatage) #force to integer
+    calculate_sustainability_metrics(kilojoules_used=joulesUsed, job_time_in_seconds=total_time)
+
+
     start_time = time.time()
     
     # Run search with BM25 model and compute NDCG@10
@@ -238,16 +248,16 @@ if __name__ == "__main__":
         metric_type="ndcg",
         save_results=True,
         debug=True,
-        model="tf-idf",
+        model="bm25",
         dataset="inaugural_speeches"
     )
     
     end_time = time.time()
     total_time = end_time - start_time
-    print(f"Total time taken: {total_time:.2f} seconds")
+    print(f"BM25 total time taken: {total_time:.2f} seconds")
 
-    machineWatage = 800 #watts
-    joulesUsed = int(total_time * machineWatage) #force to integer
     # Calculate sustainability metrics
+    joulesUsed = int(total_time * machineWatage) #force to integer
     calculate_sustainability_metrics(kilojoules_used=joulesUsed, job_time_in_seconds=total_time)
+
 
